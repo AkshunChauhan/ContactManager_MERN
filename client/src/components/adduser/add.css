@@ -1,0 +1,89 @@
+/* Styles for the Add User form */
+
+/* Container styles */
+.addUser {
+    width: 60%; /* Adjusted width for better visibility */
+    max-width: 600px; /* Added maximum width */
+    background-color: #ffffff; /* White background */
+    box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.1); /* Soft box shadow */
+    border-radius: 8px; /* Increased border radius for smoother edges */
+    margin: 50px auto; /* Centered margin */
+    padding: 30px; /* Reduced padding for more compact layout */
+}
+
+/* Form container */
+.addUserForm {
+    margin-top: 20px; /* Margin top */
+}
+
+/* Input group styles */
+.addUserForm .inputGroup {
+    width: 100%; /* Full width */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Label styles */
+.addUserForm .inputGroup label {
+    margin-bottom: 8px; /* Slightly reduced label margin for better alignment */
+    font-weight: bold; /* Added font-weight for better label visibility */
+}
+
+/* Input and select styles */
+.addUserForm .inputGroup input,
+.addUserForm .inputGroup select {
+    margin-bottom: 15px; /* Increased margin-bottom for better spacing */
+    padding: 12px; /* Increased padding for better input/select size */
+    outline: none; /* Removed default outline */
+    border: 1px solid #ccc; /* Added border for input/select */
+    border-radius: 5px; /* Rounded border */
+}
+
+/* Focus styles for input and select */
+.addUserForm .inputGroup input:focus,
+.addUserForm .inputGroup select:focus {
+    border-color: #8a2be2; /* Changed border color on focus to purple */
+}
+
+/* Button styles */
+.addUserForm .inputGroup button {
+    border: 0; /* Removed border */
+    outline: none; /* Removed default outline */
+    background-color: #8a2be2; /* Purple background color */
+    color: #ffffff; /* White text color */
+    font-weight: 600; /* Bold font weight */
+    padding: 15px; /* Increased padding */
+    cursor: pointer; /* Cursor pointer */
+    border-radius: 5px; /* Rounded border */
+    box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.1); /* Soft box shadow */
+    margin-top: 20px; /* Margin top */
+}
+
+/* Heading styles */
+.addUser h3 {
+    margin-top: 10px; /* Margin top */
+    margin-bottom: 20px; /* Added margin-bottom for better separation */
+}
+
+/* Select option styles */
+.addUserForm select option {
+    padding: 10px; /* Padding for select options */
+}
+
+/* Media Query for Tablets and Smaller Screens */
+@media (max-width: 768px) {
+    .addUser {
+        width: 90%; /* Adjusted width for smaller screens */
+        padding: 20px; /* Reduced padding for smaller screens */
+    }
+
+    .addUserForm .inputGroup input,
+    .addUserForm .inputGroup select {
+        padding: 10px; /* Reduced padding for smaller screens */
+    }
+
+    .addUserForm .inputGroup button {
+        padding: 12px; /* Reduced padding for smaller screens */
+    }
+}

@@ -3,7 +3,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import "./user.css";
 import { Link } from 'react-router-dom';
-import DeleteConfirmation from '../deleteuser/DeleteConfirmation'; // Import the DeleteConfirmation component
+import DeleteConfirmation from '../deleteuser/DeleteConfirmation';
 
 const User = () => {
   const [users, setUsers] = useState([]);
@@ -58,7 +58,7 @@ const User = () => {
             <tr key={user._id}>
               <td>{index + 1}</td>
               <td>
-                <Link to={`/user/${user._id}`}>{user.fname}</Link> {/* Make the first name clickable */}
+                <Link to={`/user/${user._id}`}>{user.fname}</Link>
               </td>
               <td>{user.lname}</td>
               <td>{user.phone}</td>
@@ -66,7 +66,7 @@ const User = () => {
               <td>{user.catagory}</td>
               <td className='actionButtons'>
                 <button onClick={() => deleteUser(user._id)}><i className="fa-solid fa-trash"></i></button>
-                <Link to={`/edit/${user._id}`}><i className="fa-solid fa-pen-to-square"></i></Link>
+                <Link to={`/add/${user._id}`}><i className="fa-solid fa-pen-to-square"></i></Link>
               </td>
             </tr>
           ))}

@@ -1,85 +1,104 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import './add.css';
 import toast from 'react-hot-toast';
 
 const Add = () => {
-  // Initial state for user data
   const initialUserState = {
     fname: '',
     lname: '',
     email: '',
-    phone: '', // Added phone field
-    catagory: ''
+    phone: '',
+    catagory: '',
   };
 
-  // State for user data and navigation
-  const [user, setUser] = useState(initialUserState);
+  const { id } = useParams();
   const navigate = useNavigate();
+  const [user, setUser] = useState(initialUserState);
 
-  // Function to handle input changes
-const inputHandler = (e) => {
-  const { name, value } = e.target;
-  // Validate phone field to accept only numbers and exactly 10 digits
-  if (name === 'phone' && !/^\d{10}$/.test(value)) {
-      // Show validation error message if input is invalid
-      toast.error('Please enter a 10-digit phone number', { position: 'top-right' });
-  } else {
-      setUser({ ...user, [name]: value });
-  }
-};
+  useEffect(() => {
+    if (id) {
+      axios.get(`http://localhost:8000/api/getone/${id}`)
+        .then((response) => {
+          setUser(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }, [id]);
 
-  // Function to submit form
+  const inputHandler = (e) => {
+    const { name, value } = e.target;
+    let newValue = value;
+    let errorMessage = ''; // Initialize error message
+  
+    // Validate phone field to accept only numbers and maximum 10 digits
+    if (name === 'phone') {
+      // Remove any non-digit characters
+      newValue = value.replace(/\D/g, '');
+      // Limit to maximum 10 digits
+      newValue = newValue.slice(0, 10);
+      
+      // Check if the phone number is exactly 10 digits
+      if (newValue.length !== 10) {
+        toast.error('Please enter a 10-digit phone number', { position: 'top-right' });
+      }
+    }
+  
+    // Update user state with the new value and error message
+    setUser({ ...user, [name]: newValue });
+  };
+  
+
   const submitForm = async (e) => {
     e.preventDefault();
 
-    // Basic validation checks
     if (!user.fname || !user.lname || !user.email || !user.phone || !user.catagory) {
-      // If any field is empty, show an error toast
       toast.error('All fields are required', { position: 'top-right' });
-      return; // Exit function early
+      return;
     }
 
     try {
-      // Send POST request to create user
-      const response = await axios.post('http://localhost:8000/api/create', user);
-      // Show success toast
+      let response;
+      if (id) {
+        response = await axios.put(`http://localhost:8000/api/update/${id}`, user);
+      } else {
+        response = await axios.post('http://localhost:8000/api/create', user);
+      }
       toast.success(response.data.msg, { position: 'top-right' });
-      // Redirect to home page
       navigate('/');
     } catch (error) {
       console.log(error);
-      // Show error toast if request fails
-      toast.error('Error adding user', { position: 'top-right' });
+      toast.error('Error adding/updating user', { position: 'top-right' });
     }
   };
 
   return (
     <div className='addUser'>
       <Link to={'/'}>Back</Link>
-      <h3>Add new user</h3>
+      <h3>{id ? 'Update user' : 'Add new user'}</h3>
       <form className='addUserForm' onSubmit={submitForm}>
-        {/* Input fields for user data */}
         <div className='inputGroup'>
           <label htmlFor='fname'>First name</label>
-          <input type='text' onChange={inputHandler} id='fname' name='fname' autoComplete='off' placeholder='First name' />
+          <input type='text' value={user.fname} onChange={inputHandler} id='fname' name='fname' autoComplete='off' placeholder='First name' />
         </div>
         <div className='inputGroup'>
           <label htmlFor='lname'>Last name</label>
-          <input type='text' onChange={inputHandler} id='lname' name='lname' autoComplete='off' placeholder='Last name' />
+          <input type='text' value={user.lname} onChange={inputHandler} id='lname' name='lname' autoComplete='off' placeholder='Last name' />
         </div>
         <div className='inputGroup'>
           <label htmlFor='phone'>Phone</label>
-          <input type='text' onChange={inputHandler} id='phone' name='phone' autoComplete='off' placeholder='phone' />
+          <input type='text' value={user.phone} onChange={inputHandler} id='phone' name='phone' autoComplete='off' placeholder='phone' />
         </div>
         <div className='inputGroup'>
           <label htmlFor='email'>Email</label>
-          <input type='email' onChange={inputHandler} id='email' name='email' autoComplete='off' placeholder='Email' />
+          <input type='email' value={user.email} onChange={inputHandler} id='email' name='email' autoComplete='off' placeholder='Email' />
         </div>
         <div className='inputGroup'>
-          <label htmlFor='catagory'>Catagory</label>
-          <select onChange={inputHandler} id='catagory' name='catagory'>
+          <label htmlFor='catagory'>Category</label>
+          <select value={user.catagory} onChange={inputHandler} id='catagory' name='catagory'>
             <option value=''>Select category</option>
             <option value='Family'>Family</option>
             <option value='Friend'>Friend</option>
@@ -87,9 +106,8 @@ const inputHandler = (e) => {
             <option value='Other'>Other</option>
           </select>
         </div>
-        {/* Button to submit form */}
         <div className='inputGroup'>
-          <button type='submit'>ADD USER</button>
+          <button type='submit'>{id ? 'UPDATE USER' : 'ADD USER'}</button>
         </div>
       </form>
     </div>
